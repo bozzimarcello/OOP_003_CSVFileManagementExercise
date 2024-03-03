@@ -23,3 +23,19 @@ bank.AddAccount(anotherAccount);
 double totalAccounts = bank.GetTotalBalance();
 
 Console.WriteLine($"Total balance: {totalAccounts}");
+
+// Test dei metodi di gestione dei file CSV
+// Aggiungi altri conti correnti
+bank.AddAccount(new BankAccount("123", 1000, "Pino Deipalazzi", "Savings"));
+bank.AddAccount(new BankAccount("456", 2000, "Dina Lazingara", "Investiments"));
+
+// Crea un file CSV temporaneo
+string tempFile = Path.GetTempFileName();
+
+bank.WriteAccountsToCsv(tempFile);
+
+// Leggi il file e verifica il contenuto
+string[] lines = File.ReadAllLines(tempFile);
+
+// Pulisci
+File.Delete(tempFile);
