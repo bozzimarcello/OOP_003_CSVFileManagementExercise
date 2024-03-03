@@ -76,17 +76,9 @@ namespace BankConsoleApp
         {
             // DA FARE: verifica che il percorso del file non sia nullo o vuoto,
             // altrimenti lancia un'eccezione ArgumentNullException
-            if (string.IsNullOrEmpty(filePath))
-            {
-                throw new ArgumentNullException(nameof(filePath), "File path cannot be null or empty");
-            }
 
             // DA FARE: Verifica che il file esista,
             // altrimenti lancia un'eccezione FileNotFoundException
-            if (!File.Exists(filePath))
-            {
-                throw new FileNotFoundException("File not found", filePath);
-            }
 
             // DA FARE: Leggi i conti correnti da un file CSV e aggiungili alla collezione
             //
@@ -96,55 +88,15 @@ namespace BankConsoleApp
             // 123,1000,Pino Deipalazzi,Savings
             // 456,2000,Olga Lazingara,Investiments
             // 
-            // se una riga del file ' nulla o vuota, lancia un'eccezione InvalidOperationException
-            // se una riga non restituisce esattamente 4 valori, lancia un'eccezione InvalidOperationException
-            using (StreamReader stream = new StreamReader(filePath))
-            {
-                while (!stream.EndOfStream)
-                {
-                    string? line = stream.ReadLine();
-
-                    if (line == null)
-                    {
-                        throw new InvalidOperationException("Invalid CSV file");
-                    }
-
-                    string[] values = line.Split(',');
-
-                    if (values.Length != 4)
-                    {
-                        throw new InvalidOperationException("Invalid CSV file");
-                    }
-
-                    string accountNumber = values[0];
-                    double balance = double.Parse(values[1]);
-                    string owner = values[2];
-                    string type = values[3];
-
-                    BankAccount account = new BankAccount(accountNumber, balance, owner, type);
-
-                    _accounts.Add(account);
-                }
-            }
+            // se una riga del file è nulla o vuota, lancia un'eccezione InvalidOperationException
+            // se lo split non restituisce esattamente 4 valori, lancia un'eccezione InvalidOperationException
         }
 
         public void WriteAccountsToCsv(string filePath)
         {
             // DA FARE: Verifica che il file esista, altrimenti crealo
-            if (!File.Exists(filePath))
-            {
-                File.Create(filePath);
-            }
 
             // DA FARE: Scrivi i conti correnti su un file CSV
-            using (StreamWriter stream = new StreamWriter(filePath))
-            {
-                foreach (BankAccount account in _accounts)
-                {
-                    string line = $"{account.GetAccountNumber()},{account.GetBalance()},{account.GetOwnerName()},{account.GetAccountType()}";
-                    stream.WriteLine(line);
-                }
-            }
         }
     }
 }
